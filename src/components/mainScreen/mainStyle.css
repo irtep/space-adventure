@@ -1,0 +1,49 @@
+#gridContainer {
+  display: grid;
+  grid-template-rows: 10% 60% 30%;
+  grid-template-areas:
+    'uPage'
+    'cPage'
+    'bPage';
+  grid-gap: 10px;
+  height: 100vh;
+}
+#upperPage {
+  grid-area: uPage;
+}
+#centerPage{
+  grid-area: cPage;
+  width: 100%;
+  text-align: center;
+}
+#bottomPage{
+  grid-area: bPage;
+}
+.yellowText{
+  color: yellow;
+}
+.compuButtons {
+  color: white;
+  border-color: white;
+}
+.compuButtons:hover {
+  color: black;
+  background-color: white;
+  transition: 1s;
+  cursor: pointer;
+}
+.textInCenter {
+  text-align: center;
+}
+#buttonBox {
+  width: 100%;
+  text-align: center;
+}
+#upperBox {
+  width: 100%;
+  text-align: center;
+}
+.inner {
+  display: inline-block;
+  margin: 10px;
+}

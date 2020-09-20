@@ -1,0 +1,47 @@
+#spaceAndInfo {
+  position: relative;
+}
+#space {
+  position: absolute; 
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  z-index: 0;
+}
+#details {
+  position: absolute; 
+  left: 0;
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  z-index: 1;
+  height: 100%;
+}
+#detailTable {
+  width: 100%;
+}
+#planetsImage {
+  width: 33vw;
+}
+#planetsDesc {
+  width: 33vw;
+}
+#planetsCommands {
+  width: 33vw;
+}
+.invis {
+  opacity: 0;
+}
+.planetImg {
+  max-width: 25vw;
+}
+.cyanText {
+  color: 'cyan';
+}
+.goldText {
+  color: 'gold';
+}
+.smaller {
+  font-size: 12px;
+}

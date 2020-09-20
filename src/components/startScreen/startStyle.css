@@ -1,0 +1,141 @@
+
+@import url('https://fonts.googleapis.com/css?family=Cagliostro|Chicle|Indie+Flower|Audiowide');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+:root {
+  --colorFrom: black;
+  --colorTo: white;
+}
+body {
+  color: white;
+  background-color: black;
+  font-family: 'Audiowide', cursive;
+}
+.intro {
+  color: white;
+}
+#container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 150px 1fr 1fr;
+  grid-template-areas:
+    'upC upC upC'
+    'leS ceS riS'
+    'foo foo foo';
+  grid-gap: 10px;
+}
+#upCenter { 
+  grid-area: upC;
+  text-align: center;
+  border-bottom: solid;
+  border-color: blue;
+  height: 150px;
+}
+#leftSection { 
+  grid-area: leS;
+  padding: 10px;
+}
+#centerSection { 
+  grid-area: ceS;
+  padding: 10px; 
+  border-left: solid;
+  border-right: solid;
+  border-color: blue;
+}
+#rightSection { 
+  grid-area: riS;
+  padding: 10px; 
+}
+#foot { 
+  grid-area: foo;
+  padding: 10px; 
+  border-top: solid;
+  border-color: blue;
+}
+.stars {
+  color: white;
+  text-shadow: 0 0 24px yellowgreen;
+  /*transform:rotate(300deg);
+  -webkit-transform:rotate(300deg); */
+  z-index: -1;
+}
+.smallStars {
+  font-size: 7px;
+}
+input[type=button] {  
+  background: black;
+  color: white;
+  font-size: 17px;
+  border-color: deepSkyBlue;
+  border-radius: 5px;
+  min-width: 130px;
+  height: 40px;
+  margin: 15px;
+  font-family: 'Audiowide', cursive;
+}
+.but:hover {
+  background: white;
+  color: black;
+  transition: 0.2s;
+}
+.yellowTxt {
+  color: yellow;
+}
+.bigger {
+  color: deepskyBlue;
+  font-size: 24px;
+}
+.invis {
+  display: none;
+}
+.rollMenus {
+  background: black;
+  color: yellowgreen;
+  margin-bottom: 10px;
+}
+.txtInputs {
+  margin-bottom: 10px;
+  background: black;
+  color: yellowgreen;
+
+}
+.avaImage {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  border: solid black;
+}
+.avaImage:hover {
+  border: solid;
+  border-color: red;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.bigHeader {
+  color: orange;
+}
+#infoPlace {
+  color: red;
+}
+/* Animations */
+.fadingIn {
+   -moz-animation: opacityChange 6s; /* Firefox */
+   -webkit-animation: opacityChange 6s; /* Safari      and Chrome */
+   -o-animation: opacityChange 6s; /* Opera */
+}
+@keyframes opacityChange {
+    from {opacity: 0;}
+    to {opacity: 100}
+}
+@-moz-keyframes opacityChange { /* Firefox */
+    from {opacity: 0;}
+    to {opacity: 100;}
+}
+@-webkit-keyframes opacityChange { /* Safari and Chrome */
+    from {opacity: 0;}
+    to {opacity: 100;}
+}
+@-o-keyframes opacityChange { /* Opera */
+    from {opacity: 0;}
+    to {opacity: 100;}
+}
