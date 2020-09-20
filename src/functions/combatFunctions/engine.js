@@ -140,56 +140,58 @@ export function bulletActions(bullet) {
 }
 
 export function animate(){
-  const keyDownListeners = window.addEventListener("keydown", checkKeyPressed, false);
-  const keyUpListeners = window.addEventListener("keyup", checkKeyReleased, false);
-  //console.log('gameObject var ', gameObject);
-  //console.log('gObject ', gObject);
-  if (gameObject.battleObject.pause) {
-    // game on pause
-    // if battle has ended, end the battle:
-    if (gameObject.battleObject.finished) { console.log('battle finished');}
-    // draw pause menu, that has atleast option to continue game...
-  } else {
-    // ai decisions:  (ai ship, opponent of ai)
-    spaceAiActions(gameObject.battleObject.ships[1], gameObject.battleObject.ships[0], gameObject.battleObject);
-    // actions of ships
+  if (gameObject !== null) {
+    const keyDownListeners = window.addEventListener("keydown", checkKeyPressed, false);
+    const keyUpListeners = window.addEventListener("keyup", checkKeyReleased, false);
+    //console.log('gameObject var ', gameObject);
+    //console.log('gObject ', gObject);
+    if (gameObject.battleObject.pause) {
+      // game on pause
+      // if battle has ended, end the battle:
+      if (gameObject.battleObject.finished) { console.log('battle finished');}
+      // draw pause menu, that has atleast option to continue game...
+    } else {
+      // ai decisions:  (ai ship, opponent of ai)
+      spaceAiActions(gameObject.battleObject.ships[1], gameObject.battleObject.ships[0], gameObject.battleObject);
+      // actions of ships
+      gameObject.battleObject.ships.forEach( ship => {
+        shipActions(ship);
+      });
+      // actions of bullets
+      gameObject.battleObject.bullets.forEach( bullet => {
+        if (bullet.live) {
+          bulletActions(bullet);
+        }
+      });
+      // clean dead bullets
+      if (gameObject.battleObject.bullets.length > 20) {
+        gameObject.battleObject.bullets.shift();
+      }
+      // draw
+      draw(gameObject.battleObject);
+    }
+    // check if battle is over:
     gameObject.battleObject.ships.forEach( ship => {
-      shipActions(ship);
-    });
-    // actions of bullets
-    gameObject.battleObject.bullets.forEach( bullet => {
-      if (bullet.live) {
-        bulletActions(bullet);
+      if ( ship.hitPoints < 1) { ship.destroy(); }
+      if (ship.disabled === true) {
+        gameObject.battleObject.pause = true;
+        gameObject.battleObject.finished = true;
       }
     });
-    // clean dead bullets
-    if (gameObject.battleObject.bullets.length > 20) {
-      gameObject.battleObject.bullets.shift();
-    }
-    // draw
-    draw(gameObject.battleObject);
-  }
-  // check if battle is over:
-  gameObject.battleObject.ships.forEach( ship => {
-    if ( ship.hitPoints < 1) { ship.destroy(); }
-    if (ship.disabled === true) {
-      gameObject.battleObject.pause = true;
-      gameObject.battleObject.finished = true;
-    }
-  });
-  //battleData only on bugfix purposes:
-  /*
-  document.getElementById('infoPlace').innerHTML = `hp: ${gameObject.battleObject.ships[0].showBattleData[0]}
- sp: ${gameObject.battleObject.ships[0].showBattleData[1]} e: ${gameObject.battleObject.ships[0].showBattleData[2]}`;
-  */
+    //battleData only on bugfix purposes:
     /*
-  `${gameObject.battleObject.ships[0].x} ${gameObject.battleObject.ships[0].y}
-  ${gameObject.battleObject.ships[1].x} ${gameObject.battleObject.ships[1].y}`;
-  */
-  if (gameObject.battleObject.finished !== true) {
-    const battleAnimation = window.requestAnimationFrame(animate);
-  } else {
-    console.log('finished === true');
+    document.getElementById('infoPlace').innerHTML = `hp: ${gameObject.battleObject.ships[0].showBattleData[0]}
+   sp: ${gameObject.battleObject.ships[0].showBattleData[1]} e: ${gameObject.battleObject.ships[0].showBattleData[2]}`;
+    */
+      /*
+    `${gameObject.battleObject.ships[0].x} ${gameObject.battleObject.ships[0].y}
+    ${gameObject.battleObject.ships[1].x} ${gameObject.battleObject.ships[1].y}`;
+    */
+    if (gameObject.battleObject.finished !== true) {
+      const battleAnimation = window.requestAnimationFrame(animate);
+    } else {
+      console.log('finished === true');
+    }    
   }
 }
 

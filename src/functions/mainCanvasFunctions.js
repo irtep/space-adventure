@@ -1,4 +1,4 @@
-import { arcVsArc, distanceCheck, giveRatings, rectVsRectInMap, checkRoute } from './helpFunctions'; 
+import { arcVsArc, distanceCheck, giveRatings, rectVsRectInMap, checkRoute } from './helpFunctions';
 import { motors, shipGuns, hulls, shipModules } from '../data/shipData.js';
 import { systems } from '../data/systemsAndPlanets.js';
 
@@ -30,7 +30,7 @@ export function movePlayerShip(gameObject, isShip, isPlanet, target, motorPower)
 }
 
 function clearCanvas(canvas, ctx){
-  ctx.clearRect(0,0,canvas.width,canvas.height);  // clear all 
+  ctx.clearRect(0,0,canvas.width,canvas.height);  // clear all
 }
       /*
       motors
@@ -43,7 +43,8 @@ function clearCanvas(canvas, ctx){
       (name, size, energyUsage, power, moduleType, value, desc)
        */
 export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetails, scannedShip) {
-  const mainInfoText1 = 'Enjoy the game! If you do not know what to do, click Help Me! below.' 
+  //console.log('scanned shipo: ', scannedShip);
+  const mainInfoText1 = 'Enjoy the game! If you do not know what to do, click Help Me! below.'
   const mainInfoText2 = '';
   const ctx = canvas.getContext("2d");
   const whatSystem = systems.filter( sys => sys.name === gameObject.player.systemLocation);
@@ -68,7 +69,7 @@ export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetai
   // (name, size, energyUsage, power, moduleType, value, desc)
 
   //console.log('drawing: ', gameObject);
-  ctx.clearRect(0,0,canvas.width,canvas.height);  // clear all 
+  ctx.clearRect(0,0,canvas.width,canvas.height);  // clear all
 
   switch (whatToDraw) {
     case 'system':
@@ -84,14 +85,14 @@ export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetai
       ctx.fillStyle = 'gold';
       ctx.fillText(whatSystem[0].desc, 10, 35);
       */
-      
+
       // paint planets
       whatSystem[0].locations.forEach( (loca, index) => {
         // make collision check if this is being hovered atm.
         const collision = arcVsArc(loca.coords, hoverDetails, loca.size, 5);
-        let fillColor = 'white'; 
+        let fillColor = 'white';
         let fillDetails = '';
-        
+
         if (collision) { fillColor = 'yellowGreen'; fillDetails = ' (click for details)'; }
 
         ctx.beginPath();
@@ -106,7 +107,7 @@ export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetai
         ctx.strokeText(loca.name, loca.coords.x + 10, loca.coords.y);
         ctx.shadowBlur=0;
         ctx.fillStyle=fillColor;
-        ctx.fillText(loca.name + fillDetails, loca.coords.x + 10, loca.coords.y); 
+        ctx.fillText(loca.name + fillDetails, loca.coords.x + 10, loca.coords.y);
         ctx.closePath();
       });
       // draw ship
@@ -118,7 +119,7 @@ export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetai
       ctx.font = '12px Audiowide';
       ctx.fillStyle = 'orange';
       ctx.fillText(gameObject.player.ship.name, gameObject.player.mapCoords.x + 10, gameObject.player.mapCoords.y - 10);
-       
+
       // draw npc ships
       gameObject.aiShips.forEach( ship => {
         // check distance
@@ -157,7 +158,7 @@ export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetai
       ctx.font = '12px Audiowide';
       ctx.fillStyle = 'lightGreen';
       ctx.fillText('Scanner', 10, canvas.height -140 );
-      if (scannedShip !== '') {
+      if (scannedShip !== '' && scannedShip !== undefined) {
         const aiShipsDetails = giveRatings(scannedShipDetails[0]);
         const playerShipDetails = giveRatings(gameObject.player.ship);
         // scanneds ai ships stats
