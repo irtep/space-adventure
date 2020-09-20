@@ -4,6 +4,8 @@ import { motors, hulls, shipGuns, shipModules, Motor, ShipGun, ShipModule, Hull,
 // gets ships details and returns them as "power ratings"
 // array jossa front ja sides...
 export function giveRatings(ship) {
+  //console.log('giving ratings: ', ship);
+  //console.log('hulls: ', hulls);
   const shipsHull = hulls.filter( hull => hull.name === ship.hull);
   const shipsMotor = motors.filter( motor => motor.name === ship.motor);
   const shipsFrontGun = shipGuns.filter( gun => gun.name === ship.weapons.front);

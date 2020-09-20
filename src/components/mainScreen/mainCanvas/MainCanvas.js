@@ -68,238 +68,65 @@ class MainCanvas extends Component {
         botPan.classList.remove('invis');
       }
     }
-    // start NPC ships
-    if (this.state.gameObject !== '') {
-      const updateSpeed = 1000;
-      // ships are standingby
-      // engine .powers are 10 and 20 atm.
-      if (this.state.gameObject.aiShips[0].travelStatus === 'standBy') {
-        // change travel status
-        this.state.gameObject.aiShips.forEach( ship => {
-          if (ship.travelStatus === 'standBy') {
-            ship.travelStatus = 'voyaging';
-          }
-        });
-        // start movements
-        /*
-        function animateShipMovements(ships) {
-          // ai ships first
-          this.state.gameObject.aiShips.forEach( (ship, idx) => {
-            // get power of motor
-            let motorPower = null;
-            for (let i = 0; i < motors.length; i++) {
-              if (motors[i].name === this.state.gameObject.aiShips[idx].motor) {
-                motorPower = motors[i].power / 10;
-              }
-            }
-            if (ship.disabled === false) {
-              const moving = moveShip(ship, this.state.gameObject.player, motorPower);
-              const distanceToPoint = distanceCheck(moving.now, moving.target);
-              if (distanceToPoint < 3) {
-                // at destination,
-                // pick a new target
-                // nextPoint
-                ship.nextPoint++;
-                if (ship.nextPoint >= ship.aiDetails.patrolRoute.length) {
-                  ship.nextPoint = 0;
-                }
-              } else {
-              // move npc ship  and update to state to get refresh
-              const gameObject = {...this.state.gameObject};
-              gameObject.aiShips[idx].aiDetails.located = moving.next;
-              makeSpaceMap(this.state.gameObject, document.getElementById('space'), systems, 'system', hoverDetails, this.state.scannedShip);
-              // send info to parent and update setState
-              this.setState({gameObject});
-              }
-            }
-          });
+    function animateShipMovements(gameObj){
+      if (gameObj.pause) { // gotta check this... as i dont have pause there atm.
+        // game on pause
 
-          // then players ship
-          // get power of motor
-          let motorPower = null;
-          for (let i = 0; i < motors.length; i++) {
-            if (motors[i].name === this.state.gameObject.player.ship.motor) {
-              motorPower = motors[i].power / 10;
-            }
+        // draw pause menu, that has atleast option to continue game...
+      } else {
+        // ai decisions:  (ai ship, opponent of ai)
+      gameObj.aiShips.forEach( (ship, idx) => {
+        // get power of motor
+        let motorPower = null;
+        for (let i = 0; i < motors.length; i++) {
+          if (motors[i].name === gameObj.aiShips[idx].motor) {
+            motorPower = motors[i].power / 10;
           }
-          // if moving
-          if (this.state.travelStatus === 'voyaging') {
-            // get info about where are we and where to go
-            const systemLocation = this.state.gameObject.player.systemLocation;
-            const getSystem = systems.filter(syst => systemLocation === syst.name);
-            const chosenPlanet = getSystem[0].locations.filter(planet => this.state.travelTarget === planet.name);
-            const chosenShip = this.state.gameObject.aiShips.filter(ship => this.state.travelTarget === ship.name);
-            let travelingTo = null;
-            let isShip = false;
-            let isPlanet = false;
-            // choose now if it is chosenPlanet or chosenShip
-            if (chosenPlanet.length === 1) {
-              travelingTo = chosenPlanet[0].coords;
-              isPlanet = true;
-            } else {
-              travelingTo = chosenShip[0].aiDetails.located;
-              isShip = true;
-            }
-            // remember to add movePlayerShip to imports
-            const moving = movePlayerShip(this.state.gameObject, isShip, isPlanet, this.state.travelTarget, motorPower)
-            //const moving = movePlayerShip(ship, travelTarget, motorPower);
-            const distanceToPoint = distanceCheck(moving.now, moving.target);
-            if (distanceToPoint < 4) {
-              // at destination,
-              if (isPlanet) {
-                const gameObject = {...this.state.gameObject};
-                gameObject.player.planetLocation = this.state.travelTarget;
-                this.setState({
-                  travelStatus: 'docked',
-                  gameObject});
-              } else {
-                this.setState({
-                  travelStatus: 'rendezvouz',
-                  showDetailsOf: 'preCombat'
-                  });
-              }
-            } else {
-              // move ship  and update to state to get refresh
-              const gameObject = {...this.state.gameObject};
-              gameObject.player.mapCoords = moving.next;  //
-              makeSpaceMap(this.state.gameObject, document.getElementById('space'), systems, 'system', hoverDetails, this.state.scannedShip);
-              // send info to parent and update setState
-              this.setState({gameObject});
-              }
-            }
-            //  here terminate movements if fight going on etc.
-            //if (this.state.travelStatus === 'rendezvouz') {
-          //    console.log('clearing travelPlayer');
-          //    clearInterval(travelPlayer);
-          //  }
-
-          //  here terminate movements if fight going on etc.
-            if (this.state.travelStatus === 'rendezvouz') {
-              // dont do anymore
-            } else {
-              const travelAnimation = window.requestAnimationFrame(animateShipMovements);
-            }
         }
-        // launch movement animation
-        animateShipMovements();
-*/
-        /*
-
-        const travelNPC = window.setInterval( () => {
-          this.state.gameObject.aiShips.forEach( (ship, idx) => {
-            // get power of motor
-            let motorPower = null;
-            for (let i = 0; i < motors.length; i++) {
-              if (motors[i].name === this.state.gameObject.aiShips[idx].motor) {
-                motorPower = motors[i].power / 10;
-              }
+        if (ship.disabled === false) {
+          const moving = moveShip(ship, gameObj.player, motorPower);
+          const distanceToPoint = distanceCheck(moving.now, moving.target);
+          if (distanceToPoint < 3) {
+            // at destination,
+            // pick a new target
+            // nextPoint
+            ship.nextPoint++;
+            if (ship.nextPoint >= ship.aiDetails.patrolRoute.length) {
+              ship.nextPoint = 0;
             }
-            if (ship.disabled === false) {
-              const moving = moveShip(ship, this.state.gameObject.player, motorPower);
-              const distanceToPoint = distanceCheck(moving.now, moving.target);
-              if (distanceToPoint < 3) {
-                // at destination,
-                // pick a new target
-                // nextPoint
-                ship.nextPoint++;
-                if (ship.nextPoint >= ship.aiDetails.patrolRoute.length) {
-                  ship.nextPoint = 0;
-                }
-              } else {
-              // move npc ship  and update to state to get refresh
-              const gameObject = {...this.state.gameObject};
-              gameObject.aiShips[idx].aiDetails.located = moving.next;
-              makeSpaceMap(this.state.gameObject, document.getElementById('space'), systems, 'system', hoverDetails, this.state.scannedShip);
-              // send info to parent and update setState
-              this.setState({gameObject});
-              }
-            }
-          });
-          //  here terminate movements if fight going on etc.
-            if (this.state.travelStatus === 'rendezvouz') {
-              clearInterval(travelNPC);
-            }
-        }, updateSpeed);
-        */
-
-      // start PLAYER ship here
-
-      if (this.state.travelStatus === 'standBy') {
-        // change travel status
-        this.setState({travelStatus: 'docked'});
-        // start movements
-        /*
-        const travelPlayer = window.setInterval( () => {
-          // get power of motor
-          let motorPower = null;
-          for (let i = 0; i < motors.length; i++) {
-            if (motors[i].name === this.state.gameObject.player.ship.motor) {
-              motorPower = motors[i].power / 10;
-            }
+          } else {
+          // move npc ship  and update to state to get refresh
+          const gameObject = {...gameObj};
+          gameObject.aiShips[idx].aiDetails.located = moving.next;
+          //console.log('draw: ', gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
+          //makeSpaceMap(gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
+          // send info to parent and update setState
+          //this.setState({gameObject});
           }
-          // if moving
-          if (this.state.travelStatus === 'voyaging') {
-            // get info about where are we and where to go
-            const systemLocation = this.state.gameObject.player.systemLocation;
-            const getSystem = systems.filter(syst => systemLocation === syst.name);
-            const chosenPlanet = getSystem[0].locations.filter(planet => this.state.travelTarget === planet.name);
-            const chosenShip = this.state.gameObject.aiShips.filter(ship => this.state.travelTarget === ship.name);
-            let travelingTo = null;
-            let isShip = false;
-            let isPlanet = false;
-            // choose now if it is chosenPlanet or chosenShip
-            if (chosenPlanet.length === 1) {
-              travelingTo = chosenPlanet[0].coords;
-              isPlanet = true;
-            } else {
-              travelingTo = chosenShip[0].aiDetails.located;
-              isShip = true;
-            }
-            // remember to add movePlayerShip to imports
-            const moving = movePlayerShip(this.state.gameObject, isShip, isPlanet, this.state.travelTarget, motorPower)
-            //const moving = movePlayerShip(ship, travelTarget, motorPower);
-            const distanceToPoint = distanceCheck(moving.now, moving.target);
-            if (distanceToPoint < 4) {
-              // at destination,
-              if (isPlanet) {
-                const gameObject = {...this.state.gameObject};
-                gameObject.player.planetLocation = this.state.travelTarget;
-                this.setState({
-                  travelStatus: 'docked',
-                  gameObject});
-              } else {
-                this.setState({
-                  travelStatus: 'rendezvouz',
-                  showDetailsOf: 'preCombat'
-                  });
-              }
-            } else {
-              // move ship  and update to state to get refresh
-              const gameObject = {...this.state.gameObject};
-              gameObject.player.mapCoords = moving.next;  //
-              makeSpaceMap(this.state.gameObject, document.getElementById('space'), systems, 'system', hoverDetails, this.state.scannedShip);
-              // send info to parent and update setState
-              this.setState({gameObject});
-              }
-            }
-            //  here terminate movements if fight going on etc.
-            if (this.state.travelStatus === 'rendezvouz') {
-              console.log('clearing travelPlayer');
-              clearInterval(travelPlayer);
-            }
-        }, updateSpeed);
-        */
-
-      }
-      }
-      this.state.gameObject.aiShips.forEach( ship => {
-        // start ai-ships
-        if (ship.travelStatus === 'standBy') {
-          ship.travelStatus = 'voyaging';
-          const moving = moveShip(ship, this.state.gameObject.player);
-          // return as now, next, target... all in coords.
         }
       });
+        // draw
+        makeSpaceMap(gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
+      }
+      /*
+      // check if battle is over:
+      tGo.battleObject.ships.forEach( ship => {
+        if ( ship.hitPoints < 1) { ship.destroy(); }
+        if (ship.disabled === true) {
+          tGo.battleObject.pause = true;
+          tGo.battleObject.finished = true;
+        }
+      });
+      */
+    //  if (this.state.showDetailsOf !== 'space') {
+        const battleAnimation = window.requestAnimationFrame(animate);
+  //    } else {
+  //      console.log('not space');
+  //    }
+    }  // animate ships ends
+    console.log('gO now: ', JSON.parse(JSON.stringify(this.state.gameObject)));
+    if (this.state.gameObject !== '') {
+      animateShipMovements(this.state.gameObject);
     }
   }
   financialAction(data){
