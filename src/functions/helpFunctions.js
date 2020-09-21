@@ -69,11 +69,12 @@ export function distanceCheck(subj, obj) {
 // checks what direction to take to get fastest
 export function checkRoute(from, to) {
   let distance = {index: null, distance: 5000};
+  const travellingSpeed = 0.03;
   // all directions nw,n,ne,w,e,sw,s,se
   const dirs = [
-    {x: from.x - 1, y: from.y - 1}, {x: from.x, y: from.y - 1}, {x: from.x + 1, y: from.y - 1},
-    {x: from.x - 1, y: from.y}, {x: from.x, y: from.y}, {x: from.x + 1, y: from.y},
-    {x: from.x - 1, y: from.y + 1}, {x: from.x, y: from.y + 1}, {x: from.x + 1, y: from.y + 1}
+    {x: from.x - travellingSpeed, y: from.y - travellingSpeed}, {x: from.x, y: from.y - travellingSpeed}, {x: from.x + travellingSpeed, y: from.y - travellingSpeed},
+    {x: from.x - travellingSpeed, y: from.y}, {x: from.x, y: from.y}, {x: from.x + travellingSpeed, y: from.y},
+    {x: from.x - travellingSpeed, y: from.y + travellingSpeed}, {x: from.x, y: from.y + travellingSpeed}, {x: from.x + travellingSpeed, y: from.y + travellingSpeed}
   ];
   dirs.forEach( (dir, idx) => {
     const distanceResult = distanceCheck(dir, to);

@@ -27,14 +27,79 @@ class MainCanvas extends Component {
       travelTarget: '',  // this is needed to compare to clickedPlanet to determine if target has changed
       requestFromBottom: '',
       scannedShip: '',
-      travelStatus: 'standBy'
+      travelStatus: 'standBy',
+      animation: false
     }
     this.hovering = this.hovering.bind(this);
     this.clickControl = this.clickControl.bind(this);
     this.getDataFromChild = this.getDataFromChild.bind(this);
     this.sendToBottom = this.sendToBottom.bind(this);
     this.financialAction = this.financialAction.bind(this);
+    this.animateShipMovements = this.animateShipMovements.bind(this);
   }
+  animateShipMovements(){
+    const gameObj = this.state.gameObject;
+    const gameO = this.state;
+    if (gameObj.pause) { // gotta check this... as i dont have pause there atm.
+      // game on pause
+
+      // draw pause menu, that has atleast option to continue game...
+    } else {
+      // ai decisions:  (ai ship, opponent of ai)
+    gameObj.aiShips.forEach( (ship, idx) => {
+      // get power of motor
+      let motorPower = null;
+      for (let i = 0; i < motors.length; i++) {
+        if (motors[i].name === gameObj.aiShips[idx].motor) {
+          motorPower = motors[i].power / 10;
+          //console.log('motor power to:', motorPower);
+        }
+      }
+      if (ship.disabled === false) {
+        const moving = moveShip(ship, gameObj.player, motorPower);
+        const distanceToPoint = distanceCheck(moving.now, moving.target);
+        if (distanceToPoint < 3) {
+          // at destination,
+          // pick a new target
+          // nextPoint
+          ship.nextPoint++;
+          if (ship.nextPoint >= ship.aiDetails.patrolRoute.length) {
+            ship.nextPoint = 0;
+          }
+        } else {
+        // move npc ship  and update to state to get refresh
+        const gameObject = {...gameObj};
+        gameObject.aiShips[idx].aiDetails.located = moving.next;
+        //console.log('draw: ', gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
+        //makeSpaceMap(gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
+        // send info to parent and update setState
+        //this.setState({gameObject});
+        }
+      }
+    });
+      // draw
+      //console.log('draw call');
+      // get mouse locations offsets to get where mouse is hovering.
+      const hoverDetails = {x: 0, y: 0};
+      makeSpaceMap(gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
+    }
+    /*
+    // check if battle is over:
+    tGo.battleObject.ships.forEach( ship => {
+      if ( ship.hitPoints < 1) { ship.destroy(); }
+      if (ship.disabled === true) {
+        tGo.battleObject.pause = true;
+        tGo.battleObject.finished = true;
+      }
+    });
+    */
+    if (gameO.showDetailsOf === 'space') {
+      //console.log('still space');
+      const battleAnimation = window.requestAnimationFrame(this.animateShipMovements);
+    } else {
+      console.log('not space');
+    }
+  }  // animate ships ends
   componentDidUpdate() {
     //console.log('this.state at mainCanvas', this.state);
     const hoverDetails = {x: 0, y: 0};
@@ -68,65 +133,18 @@ class MainCanvas extends Component {
         botPan.classList.remove('invis');
       }
     }
-    function animateShipMovements(gameObj){
-      if (gameObj.pause) { // gotta check this... as i dont have pause there atm.
-        // game on pause
+    console.log('gO now: ', JSON.parse(JSON.stringify(this.state)));
+    if (this.state.gameObject !== '' && this.state.animation === false) {
+    //  const travelAnimation = window.setInterval( () => {
+        console.log('starting animation', this.state.animation);
+        this.animateShipMovements();
+        this.setState({animation: true});
+        console.log('should now animation false', this.state.animation);
+    //    if (this.state.travelStatus === 'rendezvouz' || this.state.showDetailsOf !== 'space') {
+    //      clearInterval(travelAnimation);
+    //    }
+    //}, 1000);
 
-        // draw pause menu, that has atleast option to continue game...
-      } else {
-        // ai decisions:  (ai ship, opponent of ai)
-      gameObj.aiShips.forEach( (ship, idx) => {
-        // get power of motor
-        let motorPower = null;
-        for (let i = 0; i < motors.length; i++) {
-          if (motors[i].name === gameObj.aiShips[idx].motor) {
-            motorPower = motors[i].power / 10;
-          }
-        }
-        if (ship.disabled === false) {
-          const moving = moveShip(ship, gameObj.player, motorPower);
-          const distanceToPoint = distanceCheck(moving.now, moving.target);
-          if (distanceToPoint < 3) {
-            // at destination,
-            // pick a new target
-            // nextPoint
-            ship.nextPoint++;
-            if (ship.nextPoint >= ship.aiDetails.patrolRoute.length) {
-              ship.nextPoint = 0;
-            }
-          } else {
-          // move npc ship  and update to state to get refresh
-          const gameObject = {...gameObj};
-          gameObject.aiShips[idx].aiDetails.located = moving.next;
-          //console.log('draw: ', gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
-          //makeSpaceMap(gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
-          // send info to parent and update setState
-          //this.setState({gameObject});
-          }
-        }
-      });
-        // draw
-        makeSpaceMap(gameObj, document.getElementById('space'), systems, 'system', hoverDetails, gameObj.scannedShip);
-      }
-      /*
-      // check if battle is over:
-      tGo.battleObject.ships.forEach( ship => {
-        if ( ship.hitPoints < 1) { ship.destroy(); }
-        if (ship.disabled === true) {
-          tGo.battleObject.pause = true;
-          tGo.battleObject.finished = true;
-        }
-      });
-      */
-    //  if (this.state.showDetailsOf !== 'space') {
-        const battleAnimation = window.requestAnimationFrame(animate);
-  //    } else {
-  //      console.log('not space');
-  //    }
-    }  // animate ships ends
-    console.log('gO now: ', JSON.parse(JSON.stringify(this.state.gameObject)));
-    if (this.state.gameObject !== '') {
-      animateShipMovements(this.state.gameObject);
     }
   }
   financialAction(data){
@@ -193,6 +211,7 @@ class MainCanvas extends Component {
           showDetailsOf: 'space',
           requestFromBottom: '',
           scannedShip: '',
+          animation: false
           });
           console.log('continue.. state..', this.state);
       break;
@@ -203,6 +222,7 @@ class MainCanvas extends Component {
           travelStatus: 'voyaging',
           travelTarget: this.state.clickedPlanet,
           showDetailsOf: 'space',
+          animation: false,
           gameObject
         });
       break;
@@ -324,7 +344,10 @@ class MainCanvas extends Component {
       break;
       case 'back':
         this.sendToBottom('back');
-        this.setState({showDetailsOf: 'space'});
+        this.setState({
+          showDetailsOf: 'space',
+          animation: false
+        });
       break;
       default: console.log('not finding val at getDataFromChild at mainCanvas');
     };
