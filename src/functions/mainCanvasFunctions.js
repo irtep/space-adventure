@@ -159,6 +159,7 @@ export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetai
       ctx.fillStyle = 'lightGreen';
       ctx.fillText('Scanner', 10, canvas.height -140 );
       if (scannedShip !== '' && scannedShip !== undefined) {
+        //console.log('scanned ship: ', scannedShip);
         const aiShipsDetails = giveRatings(scannedShipDetails[0]);
         const playerShipDetails = giveRatings(gameObject.player.ship);
         // scanneds ai ships stats
@@ -200,6 +201,8 @@ export function makeSpaceMap(gameObject, canvas, systems, whatToDraw, hoverDetai
           ctx.fillStyle = 'red';
           ctx.fillText('Set course to intercept ' + scannedShipDetails[0].name, 130, canvas.height - 9);
         }
+      } else {
+        //console.log('no scanned ship!');
       }
     break;
   }
