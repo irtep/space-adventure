@@ -15,7 +15,7 @@ class PostCombat extends Component {
   }
   sendToParent(info) {
     if (this.state.battleResult === 'lost') {
-      window.location.href = 'https://space-adventure.stackblitz.io/';
+      window.location.href = 'https://testiprojekti-eff93.web.app/';
     } else {
       // post combat after win not coded yet properly, so game ends here too!
       //window.location.href = 'https://space-adventure.stackblitz.io/';
@@ -59,7 +59,7 @@ class PostCombat extends Component {
         makeSpaceMap(this.state.gameObject, document.getElementById('space'), systems, 'system', hoverDetails, this.state.scannedShip);
         // send info to parent and update setState
         this.setState({gameObject});
-        */ 
+        */
       }
     }
   }
