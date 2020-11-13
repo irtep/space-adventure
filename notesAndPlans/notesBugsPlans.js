@@ -23,3 +23,5 @@ To do
     Rep calculating system
     Sounds and music (i have tracks from Ordos somewhere..)
     Guns and systems for sale
+
+// https://create-react-app.dev/docs/getting-started/
